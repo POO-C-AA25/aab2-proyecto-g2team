@@ -31,7 +31,7 @@ public class Factura {
         for (Producto p : productosComprados) {
             double precio = p.obtenerPrecioAplicado() * p.stock;
             total += precio;
-            int idx = getCategoriaIndex(p);
+            int idx = obtenerCategoria(p);
             if (idx >= 0) {
                 totalesPorCategoria[idx] += precio;
             }
@@ -39,7 +39,7 @@ public class Factura {
     }
 
     // Convierte la categoria texto a indice del arreglo
-    public static int getCategoriaIndex(Producto p) {
+    public static int obtenerCategoria(Producto p) {
         switch (p.categoria) {
             case "VIVIENDA":
                 return 0;

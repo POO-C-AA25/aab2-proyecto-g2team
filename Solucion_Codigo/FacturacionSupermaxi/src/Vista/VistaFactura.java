@@ -4,7 +4,7 @@ import Modelo.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 
-// Clase que maneja la interaccion con el usuario (consola)
+// Clase que interactua con los usuarios
 public class VistaFactura {
 
     public Scanner entrada = new Scanner(System.in);
