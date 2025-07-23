@@ -1,6 +1,8 @@
 package Modelo;
 // Producto de categoria Vivienda, con su logica de promocion particular
+
 public class ProductoVivienda extends Producto {
+
     public ProductoVivienda(int codigo, String nombre, int dia, int mes, int anio, double precioNormal, int stock) {
         super(codigo, nombre, dia, mes, anio, precioNormal, stock, "VIVIENDA");
     }
@@ -14,7 +16,7 @@ public class ProductoVivienda extends Producto {
     // Determina si el producto caduca en menos de 30 dias (desde una fecha fija)
     @Override
     public boolean estaProximaCaducidad() {
-        int hoyDia = 4, hoyMes = 6, hoyAnio = 2025;
+        int hoyDia = 23, hoyMes = 7, hoyAnio = 2025;
         return (anioCaduca == hoyAnio && mesCaduca == hoyMes && (diaCaduca - hoyDia) <= 30 && (diaCaduca - hoyDia) >= 0);
     }
 
@@ -24,5 +26,3 @@ public class ProductoVivienda extends Producto {
         return esPrecioPromo() ? precioNormal * 0.90 : precioNormal;
     }
 }
-
-

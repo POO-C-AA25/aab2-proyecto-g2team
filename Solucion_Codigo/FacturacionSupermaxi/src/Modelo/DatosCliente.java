@@ -1,6 +1,8 @@
 package Modelo;
 // Clase que guarda los datos de un cliente
+
 public class DatosCliente {
+
     public String nombre;
     public String cedula;
     public String direccion;

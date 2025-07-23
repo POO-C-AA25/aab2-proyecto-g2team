@@ -1,15 +1,16 @@
+// Controlador/ControladorFactura.java
 package Controlador;
 
 import java.util.ArrayList;
 import Modelo.*;
 import Vista.*;
-import java.util.ArrayList;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
 // Clase que coordina la logica del sistema (menu, operaciones)
 public class ControladorFactura {
+
     public ArrayList<Factura> listaFacturas = new ArrayList<>();
     public VistaFactura vista = new VistaFactura();
     public Inventario inventario = new Inventario();
@@ -22,12 +23,22 @@ public class ControladorFactura {
         boolean salir = false;
         while (!salir) {
             int op = vista.mostrarMenuPrincipal();
-            switch(op) {
-                case 1: menuFactura(); break;
-                case 2: menuProductos(); break;
-                case 3: vista.mostrarFacturas(listaFacturas); break;
-                case 4: mostrarEstadisticas(); break;
-                case 0: salir = true; break;
+            switch (op) {
+                case 1:
+                    menuFactura();
+                    break;
+                case 2:
+                    menuProductos();
+                    break;
+                case 3:
+                    vista.mostrarFacturas(listaFacturas);
+                    break;
+                case 4:
+                    mostrarEstadisticas();
+                    break;
+                case 0:
+                    salir = true;
+                    break;
             }
         }
     }
@@ -38,16 +49,27 @@ public class ControladorFactura {
         do {
             op = vista.mostrarMenuFactura();
             switch (op) {
-                case 1: cliente = pedirDatosCliente(); break;
-                case 2: agregarProductoACarrito(); break;
+                case 1:
+                    cliente = pedirDatosCliente();
+                    break;
+                case 2:
+                    agregarProductoACarrito();
+                    break;
                 case 3:
-                    if (cliente == null) vista.mostrarMensaje("Primero ingrese los datos del cliente.");
-                    else if (carrito.productosCarrito.isEmpty()) vista.mostrarMensaje("El carrito esta vacio.");
-                    else {
+                    if (cliente == null) {
+                        vista.mostrarMensaje("Primero ingrese los datos del cliente.");
+                    } else if (carrito.productosCarrito.isEmpty()) {
+                        vista.mostrarMensaje("El carrito esta vacio.");
+                    } else {
+                        // 1) Creo la factura
                         Factura nueva = new Factura(cliente, carrito.getProductosCarrito());
+                        // 2) Llamada externa a calcularTotales() para reiniciar y sumar
+                        nueva.calcularTotales();
+                        // 3) Agrego y muestro
                         listaFacturas.add(nueva);
                         vista.mostrarMensaje("Factura generada correctamente:");
                         vista.mostrarMensaje(nueva.toString());
+                        // 4) Limpio el carrito
                         carrito.limpiarCarrito();
                     }
                     break;
@@ -63,10 +85,16 @@ public class ControladorFactura {
             switch (op) {
                 case 1:
                     Producto nuevo = pedirProductoNuevo();
-                    if (nuevo != null) inventario.agregarProducto(nuevo);
+                    if (nuevo != null) {
+                        inventario.agregarProducto(nuevo);
+                    }
                     break;
-                case 2: eliminarProductoDeLista(); break;
-                case 3: vista.mostrarListaProductos(inventario.getListaProductos()); break;
+                case 2:
+                    eliminarProductoDeLista();
+                    break;
+                case 3:
+                    vista.mostrarListaProductos(inventario.getListaProductos());
+                    break;
             }
         } while (op != 0);
     }
@@ -88,16 +116,27 @@ public class ControladorFactura {
         int anio = vista.pedirEntero("Ingrese anio de caducidad:");
         double precioNormal = vista.pedirDouble("Ingrese el precio normal:");
         int stock = vista.pedirEntero("Ingrese el stock:");
-        String categoria = vista.pedirTexto("Ingrese la categoria (VIVIENDA, SALUD, EDUCACION, ALIMENTACION, VESTIMENTA):").toUpperCase();
+        String categoria = vista.pedirTexto(
+                "Ingrese la categoria (VIVIENDA, SALUD, EDUCACION, ALIMENTACION, VESTIMENTA):"
+        ).toUpperCase();
 
-        int codigo = inventario.listaProductos.isEmpty() ? 1 : inventario.listaProductos.get(inventario.listaProductos.size() - 1).codigo + 1;
+        int codigo = inventario.getListaProductos().isEmpty()
+                ? 1
+                : inventario.getListaProductos().get(
+                        inventario.getListaProductos().size() - 1
+                ).codigo + 1;
 
         switch (categoria) {
-            case "VIVIENDA": return new ProductoVivienda(codigo, nombre, dia, mes, anio, precioNormal, stock);
-            case "SALUD": return new ProductoSalud(codigo, nombre, dia, mes, anio, precioNormal, stock);
-            case "EDUCACION": return new ProductoEducacion(codigo, nombre, dia, mes, anio, precioNormal, stock);
-            case "ALIMENTACION": return new ProductoAlimentacion(codigo, nombre, dia, mes, anio, precioNormal, stock);
-            case "VESTIMENTA": return new ProductoVestimenta(codigo, nombre, dia, mes, anio, precioNormal, stock);
+            case "VIVIENDA":
+                return new ProductoVivienda(codigo, nombre, dia, mes, anio, precioNormal, stock);
+            case "SALUD":
+                return new ProductoSalud(codigo, nombre, dia, mes, anio, precioNormal, stock);
+            case "EDUCACION":
+                return new ProductoEducacion(codigo, nombre, dia, mes, anio, precioNormal, stock);
+            case "ALIMENTACION":
+                return new ProductoAlimentacion(codigo, nombre, dia, mes, anio, precioNormal, stock);
+            case "VESTIMENTA":
+                return new ProductoVestimenta(codigo, nombre, dia, mes, anio, precioNormal, stock);
             default:
                 vista.mostrarMensaje("Categoria invalida.");
                 return null;
@@ -107,12 +146,14 @@ public class ControladorFactura {
     // Permite agregar un producto al carrito de compras
     public void agregarProductoACarrito() {
         vista.mostrarListaProductos(inventario.getListaProductos());
-        int codigo = vista.pedirEntero("Ingrese el codigo del producto que desea agregar al carrito:");
+        int codigo = vista.pedirEntero(
+                "Ingrese el codigo del producto que desea agregar al carrito:"
+        );
         Producto producto = inventario.buscarProductoPorCodigo(codigo);
         if (producto == null) {
             vista.mostrarMensaje("Producto no encontrado.");
         } else {
-            int cantidad = vista.pedirEntero("Ingrese la cantidad que desea agregar al carrito:");
+            int cantidad = vista.pedirEntero("Ingrese la cantidad que desea agregar:");
             if (cantidad > producto.stock) {
                 vista.mostrarMensaje("No hay suficiente stock disponible.");
             } else {
@@ -133,9 +174,11 @@ public class ControladorFactura {
     public void mostrarEstadisticas() {
         double[] totalPorCat = new double[5];
         double totalDia = 0;
-        String[] categorias = {"Vivienda", "Educacion", "Alimentacion", "Vestimenta", "Salud"};
+        String[] categorias = {
+            "Vivienda", "Educacion", "Alimentacion", "Vestimenta", "Salud"
+        };
 
-        //Acumular datos
+        // Acumular datos
         for (Factura f : listaFacturas) {
             double[] totales = f.getTotalesPorCategoria();
             for (int i = 0; i < 5; i++) {
@@ -144,7 +187,7 @@ public class ControladorFactura {
             totalDia += f.getTotalConIva();
         }
 
-        //Construir el texto del informe
+        // Construir el texto del informe
         StringBuilder sb = new StringBuilder();
         sb.append("=== ESTADISTICAS DEL DIA ===\n");
         sb.append(String.format("Total vendido: $%.2f%n", totalDia));
@@ -153,15 +196,15 @@ public class ControladorFactura {
         }
         String reporte = sb.toString();
 
-        //Mostrar por consola
+        // Mostrar por consola
         vista.mostrarMensaje(reporte);
 
-        //Serializar a archivo de texto
-        try (java.io.BufferedWriter bw = new java.io.BufferedWriter(new java.io.FileWriter("estadisticas.txt"))) {
+        // Serializar a archivo de texto
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("estadisticas.txt"))) {
             bw.write(reporte);
-            vista.mostrarMensaje("Estadísticas guardadas en estadisticas.txt");
-        } catch (java.io.IOException e) {
-            vista.mostrarMensaje("Error al escribir estadísticas: " + e.getMessage());
+            vista.mostrarMensaje("Estadisticas guardadas en estadisticas.txt");
+        } catch (IOException e) {
+            vista.mostrarMensaje("Error al escribir estadisticas: " + e.getMessage());
         }
     }
 }

@@ -1,6 +1,8 @@
 package Modelo;
 // Producto de categoria Alimentacion, con su logica de promocion particular
+
 public class ProductoAlimentacion extends Producto {
+
     public ProductoAlimentacion(int codigo, String nombre, int dia, int mes, int anio, double precioNormal, int stock) {
         super(codigo, nombre, dia, mes, anio, precioNormal, stock, "ALIMENTACION");
     }
@@ -14,7 +16,7 @@ public class ProductoAlimentacion extends Producto {
     // True si caduca en menos de 20 dias (desde una fecha fija)
     @Override
     public boolean estaProximaCaducidad() {
-        int hoyDia = 4, hoyMes = 6, hoyAnio = 2025;
+        int hoyDia = 23, hoyMes = 7, hoyAnio = 2025;
         return (anioCaduca == hoyAnio && mesCaduca == hoyMes && (diaCaduca - hoyDia) <= 20 && (diaCaduca - hoyDia) >= 0);
     }
 
@@ -24,7 +26,3 @@ public class ProductoAlimentacion extends Producto {
         return esPrecioPromo() ? precioNormal * 0.85 : precioNormal;
     }
 }
-
-
-
-

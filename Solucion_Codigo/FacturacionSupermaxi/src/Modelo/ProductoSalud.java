@@ -1,6 +1,8 @@
 package Modelo;
 // Producto de categoria Salud, con su logica de promocion particular
+
 public class ProductoSalud extends Producto {
+
     public ProductoSalud(int codigo, String nombre, int dia, int mes, int anio, double precioNormal, int stock) {
         super(codigo, nombre, dia, mes, anio, precioNormal, stock, "SALUD");
     }
@@ -14,7 +16,7 @@ public class ProductoSalud extends Producto {
     // True si caduca este mes y anio
     @Override
     public boolean estaProximaCaducidad() {
-        int hoyMes = 6, hoyAnio = 2025;
+        int hoyMes = 7, hoyAnio = 2025;
         return (anioCaduca == hoyAnio && mesCaduca == hoyMes);
     }
 
@@ -24,4 +26,3 @@ public class ProductoSalud extends Producto {
         return esPrecioPromo() ? precioNormal * 0.80 : precioNormal;
     }
 }
-

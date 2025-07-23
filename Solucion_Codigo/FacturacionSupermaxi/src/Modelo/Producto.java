@@ -1,6 +1,8 @@
 package Modelo;
 // Clase abstracta para definir la estructura comun de cualquier producto
+
 public abstract class Producto {
+
     public int codigo;
     public String nombre;
     public int diaCaduca, mesCaduca, anioCaduca;
@@ -37,10 +39,8 @@ public abstract class Producto {
     // Devuelve la representacion completa del producto como texto
     @Override
     public String toString() {
-        return codigo + ". " + nombre + " | $" + precioNormal + " | Stock: " + stock +
-                " | Vence: " + getFechaCaducidad() + " | " + categoria +
-                (esPrecioPromo() ? " [PROMO]" : "");
+        return codigo + ". " + nombre + " | $" + precioNormal + " | Stock: " + stock
+                + " | Vence: " + getFechaCaducidad() + " | " + categoria
+                + (esPrecioPromo() ? " [PROMO]" : "");
     }
 }
-
-

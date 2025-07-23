@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Inventario {
     public ArrayList<Producto> listaProductos = new ArrayList<>();
 
-    // Agrega productos de ejemplo al inventario (hardcodeados)
+    // Agrega productos de ejemplo al inventario (datos quemados)
     public void cargarProductos() {
         listaProductos.add(new ProductoAlimentacion(1, "Arroz Blanco", 25, 6, 2025, 1.00, 100));
         listaProductos.add(new ProductoAlimentacion(2, "Huevos Medianos", 2, 7, 2025, 2.50, 80));

@@ -1,8 +1,11 @@
+// Modelo/Factura.java
 package Modelo;
+
 import java.util.ArrayList;
 
 // Clase que representa una factura de compra
 public class Factura {
+
     public DatosCliente datosCliente;
     public ArrayList<Producto> productosComprados = new ArrayList<>();
     public double total;
@@ -15,35 +18,48 @@ public class Factura {
         for (Producto p : productos) {
             productosComprados.add(p);
         }
-        calcularTotales();
     }
 
     // Calcula el total a pagar y los totales por cada categoria
     public void calcularTotales() {
+        // Reinicio de totales antes de sumar
         total = 0;
+        for (int i = 0; i < totalesPorCategoria.length; i++) {
+            totalesPorCategoria[i] = 0.0;
+        }
+        // Suma precio aplicado * stock y acumula por categoria
         for (Producto p : productosComprados) {
             double precio = p.obtenerPrecioAplicado() * p.stock;
             total += precio;
             int idx = getCategoriaIndex(p);
-            if (idx >= 0) totalesPorCategoria[idx] += precio;
+            if (idx >= 0) {
+                totalesPorCategoria[idx] += precio;
+            }
         }
     }
 
     // Convierte la categoria texto a indice del arreglo
     public static int getCategoriaIndex(Producto p) {
-        switch(p.categoria) {
-            case "VIVIENDA": return 0;
-            case "EDUCACION": return 1;
-            case "ALIMENTACION": return 2;
-            case "VESTIMENTA": return 3;
-            case "SALUD": return 4;
-            default: return -1;
+        switch (p.categoria) {
+            case "VIVIENDA":
+                return 0;
+            case "EDUCACION":
+                return 1;
+            case "ALIMENTACION":
+                return 2;
+            case "VESTIMENTA":
+                return 3;
+            case "SALUD":
+                return 4;
+            default:
+                return -1;
         }
     }
 
     // Devuelve el total con IVA
     public double getTotalConIva() {
-        return total * (1 + iva);
+        // IVA calculado sobre el subtotal
+        return total + (total * iva);
     }
 
     // Devuelve los totales por categoria
@@ -64,7 +80,9 @@ public class Factura {
         }
         sb.append("\nTotales por categoria:\n");
         for (int i = 0; i < categorias.length; i++) {
-            sb.append("  ").append(categorias[i]).append(": $").append(String.format("%.2f", totalesPorCategoria[i])).append("\n");
+            sb.append("  ").append(categorias[i])
+                    .append(": $").append(String.format("%.2f", totalesPorCategoria[i]))
+                    .append("\n");
         }
         sb.append("Subtotal: $").append(String.format("%.2f", total)).append("\n");
         sb.append("IVA (15%): $").append(String.format("%.2f", total * iva)).append("\n");

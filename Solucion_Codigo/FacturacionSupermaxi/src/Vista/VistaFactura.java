@@ -1,10 +1,12 @@
 package Vista;
+
 import Modelo.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 
 // Clase que maneja la interaccion con el usuario (consola)
 public class VistaFactura {
+
     public Scanner entrada = new Scanner(System.in);
 
     // Muestra el menu principal y devuelve la opcion elegida
@@ -50,7 +52,9 @@ public class VistaFactura {
     // Muestra la lista de productos en consola
     public void mostrarListaProductos(ArrayList<Producto> listaProductos) {
         System.out.println("---------- Lista de productos ----------");
-        for (Producto p : listaProductos) System.out.println(p);
+        for (Producto p : listaProductos) {
+            System.out.println(p);
+        }
     }
 
     // Muestra la lista de facturas en consola
@@ -59,7 +63,9 @@ public class VistaFactura {
             System.out.println("No existen facturas generadas en este momento.");
         } else {
             System.out.println("------- FACTURAS DEL DIA --------");
-            for (Factura f : listaFacturas) System.out.println(f);
+            for (Factura f : listaFacturas) {
+                System.out.println(f);
+            }
         }
     }
 
@@ -90,6 +96,3 @@ public class VistaFactura {
         return valor;
     }
 }
-
-
-

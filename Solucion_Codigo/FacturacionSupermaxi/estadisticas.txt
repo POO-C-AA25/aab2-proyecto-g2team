@@ -1,7 +1,7 @@
 === ESTADISTICAS DEL DIA ===
-Total vendido: $0.00
+Total vendido: $193.06
 Vivienda: $0.00
 Educacion: $0.00
-Alimentacion: $0.00
+Alimentacion: $167.88
 Vestimenta: $0.00
 Salud: $0.00

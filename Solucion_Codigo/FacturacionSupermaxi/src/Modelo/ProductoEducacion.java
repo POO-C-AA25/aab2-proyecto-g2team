@@ -1,6 +1,8 @@
 package Modelo;
 // Producto de categoria Educacion, con su logica de promocion particular
+
 public class ProductoEducacion extends Producto {
+
     public ProductoEducacion(int codigo, String nombre, int dia, int mes, int anio, double precioNormal, int stock) {
         super(codigo, nombre, dia, mes, anio, precioNormal, stock, "EDUCACION");
     }
@@ -23,5 +25,3 @@ public class ProductoEducacion extends Producto {
         return esPrecioPromo() ? precioNormal * 0.95 : precioNormal;
     }
 }
-
-
