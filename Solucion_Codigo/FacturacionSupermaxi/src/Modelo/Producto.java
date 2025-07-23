@@ -1,40 +1,46 @@
 package Modelo;
-import java.util.ArrayList;
-
+// Clase abstracta para definir la estructura comun de cualquier producto
 public abstract class Producto {
     public int codigo;
     public String nombre;
     public int diaCaduca, mesCaduca, anioCaduca;
-    public int mesCaducaInt, anioCaducaInt;
     public double precioNormal;
-    public String categoria;
     public int stock;
-    public ArrayList<Producto> listaProductos;
+    public String categoria;
 
-    public Producto() {}
-
-    public Producto(int codigo, String nombre, int diaCaduca, int mesCaduca, int anioCaduca,
-                    int mesCaducaInt, int anioCaducaInt, double precioNormal, String categoria, int stock) {
+    // Constructor: inicializa todos los campos de un producto
+    public Producto(int codigo, String nombre, int dia, int mes, int anio, double precioNormal, int stock, String categoria) {
         this.codigo = codigo;
         this.nombre = nombre;
-        this.diaCaduca = diaCaduca;
-        this.mesCaduca = mesCaduca;
-        this.anioCaduca = anioCaduca;
-        this.mesCaducaInt = mesCaducaInt;
-        this.anioCaducaInt = anioCaducaInt;
+        this.diaCaduca = dia;
+        this.mesCaduca = mes;
+        this.anioCaduca = anio;
         this.precioNormal = precioNormal;
-        this.categoria = categoria;
         this.stock = stock;
-        this.listaProductos = new ArrayList<>();
+        this.categoria = categoria;
     }
 
+    // Metodo abstracto: debe ser implementado por cada subclase para saber si aplica promocion
     public abstract boolean esPrecioPromo();
+
+    // Metodo abstracto: debe ser implementado para saber si el producto esta proximo a caducar
     public abstract boolean estaProximaCaducidad();
+
+    // Metodo abstracto: calcula el precio final a cobrar por el producto
     public abstract double obtenerPrecioAplicado();
 
+    // Devuelve la fecha de caducidad como texto
+    public String getFechaCaducidad() {
+        return diaCaduca + "/" + mesCaduca + "/" + anioCaduca;
+    }
+
+    // Devuelve la representacion completa del producto como texto
     @Override
     public String toString() {
-        return codigo + " - " + nombre + " - $" + precioNormal + " - Stock: " + stock;
+        return codigo + ". " + nombre + " | $" + precioNormal + " | Stock: " + stock +
+                " | Vence: " + getFechaCaducidad() + " | " + categoria +
+                (esPrecioPromo() ? " [PROMO]" : "");
     }
 }
+
 

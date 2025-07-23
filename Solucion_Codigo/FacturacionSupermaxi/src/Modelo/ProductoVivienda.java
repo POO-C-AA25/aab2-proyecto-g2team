@@ -1,24 +1,28 @@
 package Modelo;
-import java.util.ArrayList;
-
+// Producto de categoria Vivienda, con su logica de promocion particular
 public class ProductoVivienda extends Producto {
-    public ArrayList<ProductoVivienda> productosVivienda;
-
-    public ProductoVivienda() {
-        productosVivienda = new ArrayList<>();
+    public ProductoVivienda(int codigo, String nombre, int dia, int mes, int anio, double precioNormal, int stock) {
+        super(codigo, nombre, dia, mes, anio, precioNormal, stock, "VIVIENDA");
     }
 
-    public ProductoVivienda(int codigo, String nombre, int diaCaduca, int mesCaduca, int anioCaduca,
-                            int mesCaducaInt, int anioCaducaInt, double precioNormal, String categoria, int stock) {
-        super(codigo, nombre, diaCaduca, mesCaduca, anioCaduca, mesCaducaInt, anioCaducaInt, precioNormal, categoria, stock);
-        productosVivienda = new ArrayList<>();
+    // Retorna true si el stock es alto o si esta proximo a caducar (promo)
+    @Override
+    public boolean esPrecioPromo() {
+        return stock > 80 || estaProximaCaducidad();
     }
 
+    // Determina si el producto caduca en menos de 30 dias (desde una fecha fija)
     @Override
-    public boolean esPrecioPromo() { return false; }
+    public boolean estaProximaCaducidad() {
+        int hoyDia = 4, hoyMes = 6, hoyAnio = 2025;
+        return (anioCaduca == hoyAnio && mesCaduca == hoyMes && (diaCaduca - hoyDia) <= 30 && (diaCaduca - hoyDia) >= 0);
+    }
+
+    // Aplica 10% de descuento si es promocion, sino devuelve el precio normal
     @Override
-    public boolean estaProximaCaducidad() { return false; }
-    @Override
-    public double obtenerPrecioAplicado() { return precioNormal; }
+    public double obtenerPrecioAplicado() {
+        return esPrecioPromo() ? precioNormal * 0.90 : precioNormal;
+    }
 }
+
 

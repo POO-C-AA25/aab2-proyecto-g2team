@@ -1,23 +1,27 @@
 package Modelo;
-import java.util.ArrayList;
-
+// Producto de categoria Salud, con su logica de promocion particular
 public class ProductoSalud extends Producto {
-    public ArrayList<ProductoSalud> productosSalud;
-
-    public ProductoSalud() {
-        productosSalud = new ArrayList<>();
+    public ProductoSalud(int codigo, String nombre, int dia, int mes, int anio, double precioNormal, int stock) {
+        super(codigo, nombre, dia, mes, anio, precioNormal, stock, "SALUD");
     }
 
-    public ProductoSalud(int codigo, String nombre, int diaCaduca, int mesCaduca, int anioCaduca,
-                         int mesCaducaInt, int anioCaducaInt, double precioNormal, String categoria, int stock) {
-        super(codigo, nombre, diaCaduca, mesCaduca, anioCaduca, mesCaducaInt, anioCaducaInt, precioNormal, categoria, stock);
-        productosSalud = new ArrayList<>();
+    // Retorna true si el producto caduca este mes
+    @Override
+    public boolean esPrecioPromo() {
+        return estaProximaCaducidad();
     }
 
+    // True si caduca este mes y anio
     @Override
-    public boolean esPrecioPromo() { return false; }
+    public boolean estaProximaCaducidad() {
+        int hoyMes = 6, hoyAnio = 2025;
+        return (anioCaduca == hoyAnio && mesCaduca == hoyMes);
+    }
+
+    // Aplica 20% de descuento si es promocion, sino precio normal
     @Override
-    public boolean estaProximaCaducidad() { return false; }
-    @Override
-    public double obtenerPrecioAplicado() { return precioNormal; }
+    public double obtenerPrecioAplicado() {
+        return esPrecioPromo() ? precioNormal * 0.80 : precioNormal;
+    }
 }
+

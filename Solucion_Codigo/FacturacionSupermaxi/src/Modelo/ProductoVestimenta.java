@@ -1,25 +1,28 @@
 package Modelo;
-import java.util.ArrayList;
-
+// Producto de categoria Vestimenta, con su logica de promocion particular
 public class ProductoVestimenta extends Producto {
-    public ArrayList<ProductoVestimenta> productosVestimenta;
-
-    public ProductoVestimenta() {
-        productosVestimenta = new ArrayList<>();
+    public ProductoVestimenta(int codigo, String nombre, int dia, int mes, int anio, double precioNormal, int stock) {
+        super(codigo, nombre, dia, mes, anio, precioNormal, stock, "VESTIMENTA");
     }
 
-    public ProductoVestimenta(int codigo, String nombre, int diaCaduca, int mesCaduca, int anioCaduca,
-                              int mesCaducaInt, int anioCaducaInt, double precioNormal, String categoria, int stock) {
-        super(codigo, nombre, diaCaduca, mesCaduca, anioCaduca, mesCaducaInt, anioCaducaInt, precioNormal, categoria, stock);
-        productosVestimenta = new ArrayList<>();
+    // True solo si el stock es mayor a 40
+    @Override
+    public boolean esPrecioPromo() {
+        return stock > 40;
     }
 
+    // No considera caducidad para promocion
     @Override
-    public boolean esPrecioPromo() { return false; }
+    public boolean estaProximaCaducidad() {
+        return false;
+    }
+
+    // Aplica 25% de descuento si es promocion, sino precio normal
     @Override
-    public boolean estaProximaCaducidad() { return false; }
-    @Override
-    public double obtenerPrecioAplicado() { return precioNormal; }
+    public double obtenerPrecioAplicado() {
+        return esPrecioPromo() ? precioNormal * 0.75 : precioNormal;
+    }
 }
+
 
 

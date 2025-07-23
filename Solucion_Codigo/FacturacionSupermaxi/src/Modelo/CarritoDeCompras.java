@@ -1,55 +1,32 @@
 package Modelo;
 import java.util.ArrayList;
 
+// Clase que representa el carrito de compras
 public class CarritoDeCompras {
     public ArrayList<Producto> productosCarrito = new ArrayList<>();
 
+    // Agrega un producto (en copia) al carrito y descuenta stock del original
     public void agregarProducto(Producto producto, int cantidad) {
-        Producto prodCarrito = new ProductoAlimentacion(
-            producto.codigo,
-            producto.nombre,
-            producto.diaCaduca,
-            producto.mesCaduca,
-            producto.anioCaduca,
-            producto.mesCaducaInt,
-            producto.anioCaducaInt,
-            producto.precioNormal,
-            producto.categoria,
-            cantidad
-        );
-        productosCarrito.add(prodCarrito);
+        try {
+            Producto copia = producto.getClass()
+                .getConstructor(int.class, String.class, int.class, int.class, int.class, double.class, int.class)
+                .newInstance(producto.codigo, producto.nombre,
+                             producto.diaCaduca, producto.mesCaduca, producto.anioCaduca,
+                             producto.precioNormal, cantidad);
+            productosCarrito.add(copia);
+            producto.stock -= cantidad;
+        } catch (Exception e) {
+            productosCarrito.add(producto);
+        }
     }
 
-    public void eliminarProducto(int codigo) {
-        productosCarrito.removeIf(p -> p.codigo == codigo);
-    }
-
+    // Limpia el carrito para una nueva compra
     public void limpiarCarrito() {
         productosCarrito.clear();
     }
 
-    public double calcularTotal() {
-        double suma = 0;
-        for (Producto p : productosCarrito) {
-            suma += p.obtenerPrecioAplicado() * p.stock;
-        }
-        return suma * 1.15; // total con IVA (ejemplo)
-    }
-
-    public double[] calcularTotalesPorCategoria() {
-        double[] cat = new double[5]; // Suponiendo 5 categorías
-        for (Producto p : productosCarrito) {
-            int index = 0; // Puedes ajustar esto según cómo manejes las categorías
-            switch (p.categoria) {
-                case "VIVIENDA": index = 0; break;
-                case "EDUCACION": index = 1; break;
-                case "ALIMENTACION": index = 2; break;
-                case "VESTIMENTA": index = 3; break;
-                case "SALUD": index = 4; break;
-            }
-            cat[index] += p.obtenerPrecioAplicado() * p.stock;
-        }
-        return cat;
+    // Devuelve los productos actualmente en el carrito
+    public ArrayList<Producto> getProductosCarrito() {
+        return productosCarrito;
     }
 }
-
