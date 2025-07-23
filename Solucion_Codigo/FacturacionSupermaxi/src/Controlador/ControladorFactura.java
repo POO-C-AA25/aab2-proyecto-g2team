@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import Modelo.*;
 import Vista.*;
 import java.util.ArrayList;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 // Clase que coordina la logica del sistema (menu, operaciones)
 public class ControladorFactura {
@@ -130,16 +133,35 @@ public class ControladorFactura {
     public void mostrarEstadisticas() {
         double[] totalPorCat = new double[5];
         double totalDia = 0;
+        String[] categorias = {"Vivienda", "Educacion", "Alimentacion", "Vestimenta", "Salud"};
+
+        //Acumular datos
         for (Factura f : listaFacturas) {
             double[] totales = f.getTotalesPorCategoria();
-            for (int i = 0; i < 5; i++) totalPorCat[i] += totales[i];
+            for (int i = 0; i < 5; i++) {
+                totalPorCat[i] += totales[i];
+            }
             totalDia += f.getTotalConIva();
         }
-        String[] categorias = {"Vivienda", "Educacion", "Alimentacion", "Vestimenta", "Salud"};
-        vista.mostrarMensaje("=== ESTADISTICAS DEL DIA ===");
-        vista.mostrarMensaje("Total vendido: $" + String.format("%.2f", totalDia));
+
+        //Construir el texto del informe
+        StringBuilder sb = new StringBuilder();
+        sb.append("=== ESTADISTICAS DEL DIA ===\n");
+        sb.append(String.format("Total vendido: $%.2f%n", totalDia));
         for (int i = 0; i < 5; i++) {
-            vista.mostrarMensaje(categorias[i] + ": $" + String.format("%.2f", totalPorCat[i]));
+            sb.append(String.format("%s: $%.2f%n", categorias[i], totalPorCat[i]));
+        }
+        String reporte = sb.toString();
+
+        //Mostrar por consola
+        vista.mostrarMensaje(reporte);
+
+        //Serializar a archivo de texto
+        try (java.io.BufferedWriter bw = new java.io.BufferedWriter(new java.io.FileWriter("estadisticas.txt"))) {
+            bw.write(reporte);
+            vista.mostrarMensaje("Estadísticas guardadas en estadisticas.txt");
+        } catch (java.io.IOException e) {
+            vista.mostrarMensaje("Error al escribir estadísticas: " + e.getMessage());
         }
     }
 }
